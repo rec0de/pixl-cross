@@ -1,0 +1,47 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>data.js</file>
+        <file>main.cpp</file>
+        <file>img/back_trans.png</file>
+        <file>img/bigfood.png</file>
+        <file>img/eegg1.png</file>
+        <file>img/eegg2.png</file>
+        <file>img/eegg3.png</file>
+        <file>img/eegg4.png</file>
+        <file>img/food.png</file>
+        <file>img/heart.png</file>
+        <file>img/monster.png</file>
+        <file>img/moose1.png</file>
+        <file>img/moose2.png</file>
+        <file>img/moose3.png</file>
+        <file>img/moose4.png</file>
+        <file>img/moose_shadow.png</file>
+        <file>img/moose_sw.png</file>
+        <file>img/pixelmix.ttf</file>
+        <file>img/pond_day.png</file>
+        <file>img/pond_night.png</file>
+        <file>img/predator_shadow.png</file>
+        <file>img/tombstone.png</file>
+        <file>img/tree.png</file>
+        <file>img/tree_shadow.png</file>
+        <file>components/animal.qml</file>
+        <file>components/food.qml</file>
+        <file>components/heart.qml</file>
+        <file>components/predator.qml</file>
+        <file>pages/about.qml</file>
+        <file>pages/about2.qml</file>
+        <file>pages/aboutanimal.qml</file>
+        <file>pages/first.qml</file>
+        <file>pages/help.qml</file>
+        <file>pages/invite.qml</file>
+        <file>pages/logview.qml</file>
+        <file>pages/settings.qml</file>
+        <file>img/info.png</file>
+        <file>img/log.png</file>
+        <file>img/settings.png</file>
+        <file>img/back_trans_15.png</file>
+        <file>img/back_trans_20.png</file>
+        <file>img/back_trans_25.png</file>
+    </qresource>
+</RCC>
