@@ -23,7 +23,7 @@ Rectangle{
     property bool showmsgs: true // Shows log messages on main screen
     property bool night: false // Indicates nighttime
     property bool firststart: false // True is game is started for first time after update
-    property int foodspawn: 85 // Food spawn probability (per tick)
+    property int foodspawn: 55 // Food spawn probability (per tick)
     property bool daynight: false // Activates day/night cycle
     property bool paused: true // Game is paused
     property int playtime: 0 // Time played in seconds
@@ -167,7 +167,7 @@ Rectangle{
             page.foodspawn = DB.getsett(3);
         }
         else{
-            page.foodspawn = 85; // Use default if DB value is not set
+            page.foodspawn = 55; // Use default if DB value is not set
         }
 
         // Remove removed guest moose

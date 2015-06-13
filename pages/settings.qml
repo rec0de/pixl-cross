@@ -72,7 +72,7 @@ Rectangle {
             foodrate.loaded = true;
         }
         else{
-            foodrate.value = 85; // Use default if DB value is not set
+            foodrate.value = 55; // Use default if DB value is not set
             foodrate.loaded = true;
         }
         if(data[10] > 22){
