@@ -251,7 +251,7 @@ Rectangle {
 
             Label {
                 id: port
-                text:   'This app is the cross-platform/android port of the original pixl v0.2.2 for SailfishOS. The ported version might contain more bugs / UI flaws that the original version. If you want to get the best playing experience & most recent updates, I highly recommend using a SailfishOS device.'
+                text:   'This app is the cross-platform/android port of the original pixl v0.2.2 for SailfishOS. The ported version might contain more bugs / UI flaws than the original version. If you want to get the best playing experience & most recent updates, I highly recommend using a SailfishOS device.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
