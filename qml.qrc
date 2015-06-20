@@ -43,5 +43,9 @@
         <file>img/back_trans_15.png</file>
         <file>img/back_trans_20.png</file>
         <file>img/back_trans_25.png</file>
+        <file>pages/eegg.qml</file>
+        <file>img/eegg5.png</file>
+        <file>img/eegg_back.png</file>
+        <file>img/moose_eegg.png</file>
     </qresource>
 </RCC>

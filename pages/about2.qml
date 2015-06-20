@@ -11,6 +11,7 @@ Rectangle {
         property int paddingSmall: (5 / 2) * Screen.pixelDensity
         property int paddingMedium: (15 / 4) * Screen.pixelDensity
         property int paddingLarge: 4 * Screen.pixelDensity
+        property int fontSizeExtraSmall: 12
         property int fontSizeSmall: 16
         property int fontSizeMedium: 20
         property int fontSizeLarge: 24
@@ -312,6 +313,12 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: parent.clickcount = parent.clickcount + 1
                 }
+            }
+
+            Label {
+               text: 'down down right left up'
+               font.pixelSize: theme.fontSizeExtraSmall
+               anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
