@@ -10,3 +10,5 @@ Please feel free to fork & give feedback.
 You can also reach me via email at mail@rec0de.net
 
 Have fun :)
+
+![pixl banner](store_cover.png)
