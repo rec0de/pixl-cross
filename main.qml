@@ -22,6 +22,7 @@ ApplicationWindow{
 
     StackView {
         id: pageStack
+        anchors.fill: parent
         initialItem: {"item" : Qt.resolvedUrl("qrc:///pages/first.qml"), "properties" : {"width" : rootwindow.width, "height" : rootwindow.height}}
     }
 }
