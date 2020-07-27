@@ -63,7 +63,7 @@ Rectangle{
         var data = DB.getall();
         var animal_comp = Qt.createComponent("qrc:///components/animal.qml");
 
-        if(data != false){
+        if(data){
             for(var i = 0; i < data.length; i++){
                 var temp = animal_comp.createObject(page, {x: Math.floor(Math.random()*page.width), absy: Math.floor(Math.random()*page.height), name: data[i].name, age: data[i].age, id: data[i].id});
                 temp.importfromdna(data[i].dna);
@@ -75,7 +75,7 @@ Rectangle{
         // Load guest animals from DB
         data = DB.getnonlocal();
 
-        if(data != false){
+        if(data){
             for(i = 0; i < data.length; i++){
                 temp = animal_comp.createObject(page, {x: Math.floor(Math.random()*page.width), absy: Math.floor(Math.random()*page.height), name: data[i].name, age: data[i].age, id: data[i].id,local: false});
                 temp.importfromdna(data[i].dna);
@@ -333,13 +333,14 @@ Rectangle{
         }
 
         // Spawn food
-        if(Math.floor(Math.random()*page.foodspawn) == 1){
+        if(Math.floor(Math.random()*page.foodspawn) == 0){
             var x = Math.floor(Math.random()*(page.width-30*page.scale));
             var y = Math.floor(Math.random()*(page.height-90*page.scale))+menu.height;
-            x = Math.floor(x/5*page.scale)*5*page.scale; // Stick to pixel grid
-            y = Math.floor(y/5*page.scale)*5*page.scale; // Stick to pixel grid
+
+            x = Math.floor(x/(5*page.scale))*5*page.scale; // Stick to pixel grid
+            y = Math.floor(y/(5*page.scale))*5*page.scale; // Stick to pixel grid
             var food_comp = Qt.createComponent("qrc:///components/food.qml");
-            var temp = food_comp.createObject(page, {x: x, y: y});
+            var temp = food_comp.createObject(page, {x: x, y: y, manual: false});
             page.food.push(temp);
         }
 
@@ -383,7 +384,7 @@ Rectangle{
         // Trigger tick() for all predators
         var pred = page.predators;
 
-        for (var i = 0; i < pred.length; i++){
+        for (i = 0; i < pred.length; i++){
             if(pred[i].alive){
                 pred[i].tick();
             }
@@ -409,7 +410,7 @@ Rectangle{
         // Delete despawned hearts
         var hearts = page.hearts;
 
-        for (var i = 0; i < hearts.length; i++){
+        for (i = 0; i < hearts.length; i++){
             if(!hearts[i].active){
                 hearts.splice(i, 1);
                 i--;

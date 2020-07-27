@@ -366,12 +366,12 @@ function ancestors_get(id) {
     }
     );
     if(res.parenta === -1 || res.parentb === -1){
-        var parents = new Array('None', '0', 'None', '0', '0', '0');
+        var parents = ['None', '0', 'None', '0', '0', '0'];
     }
     else{
         var parenta = ancestors_getdata(res.parenta);
         var parentb = ancestors_getdata(res.parentb);
-        var parents = new Array(parenta.name, parenta.dna, parentb.name, parentb.dna, parenta.id, parentb.id);
+        var parents = [parenta.name, parenta.dna, parentb.name, parentb.dna, parenta.id, parentb.id];
     }
 
 
