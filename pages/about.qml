@@ -47,7 +47,7 @@ Rectangle {
             Item { Layout.fillWidth: true }
 
             Row{
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter
 
                 ToolButton{
                     Image {
@@ -113,7 +113,7 @@ Rectangle {
         // List non-local animals
         page.guests = DB.getnonlocal();
 
-        for(var i = 0; i < page.guests.length; i++){
+        for(i = 0; i < page.guests.length; i++){
             animalModel.append({"name": page.guests[i].name, "age": page.guests[i].age, "dna": page.guests[i].dna, "animal": true, "local": false, "id": page.guests[i].id})
         }
 
@@ -137,7 +137,7 @@ Rectangle {
         // List non-local animals
         page.guests = DB.getnonlocal();
 
-        for(var i = 0; i < page.guests.length; i++){
+        for(i = 0; i < page.guests.length; i++){
             animalModel.append({"name": page.guests[i].name, "age": page.guests[i].age, "dna": page.guests[i].dna, "animal": true, "local": false, "id": page.guests[i].id})
         }
 

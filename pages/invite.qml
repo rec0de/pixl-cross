@@ -34,7 +34,7 @@ Rectangle {
             return
         }
 
-        var url = 'https://cdown.pf-control.de/pixl/getanimal.php?code='+code; // alias domain for rec0de.net with valid SSL cert
+        var url = 'https://rec0de.net/pixl/getanimal.php?code='+code;
 
         var xhr = new XMLHttpRequest();
         xhr.timeout = 1000;
@@ -170,7 +170,7 @@ Rectangle {
                     leftMargin: theme.paddingMedium
                     rightMargin: theme.paddingMedium
                 }
-                text: 'Please enter the guest animals unique code'
+                text: 'Please enter the guest animal\'s unique code'
             }
 
             TextField{

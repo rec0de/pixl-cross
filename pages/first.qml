@@ -9,14 +9,13 @@ import 'qrc:///data.js' as DB
 Rectangle{
     id: page
     visible: true
-    height: pageStack.height
-    width: parent.width
+    width: Screen.width
+    height: Screen.height
 
-
-    property var animals: new Array()
-    property var predators: new Array()
-    property var food: new Array()
-    property var hearts: new Array()
+    property var animals: []
+    property var predators: []
+    property var food: []
+    property var hearts: []
     property bool debug: false // Display debug tools and disable automatic animal spawning
     property bool slowdown: true // Enables/Disables age based animal slowdown
     property bool spawnpred: true // Enables/Disables predator spawning
@@ -50,12 +49,13 @@ Rectangle{
     }
 
     Component.onCompleted: {
+
         DB.initialize();
         sorry.visible = false;
 
         // Test DB
         DB.setsett(14, 1337);
-        if(DB.getsett(14) != 1337){
+        if(DB.getsett(14) !== 1337){
             sorry.visible = true; // DB problem
         }
 
@@ -113,13 +113,13 @@ Rectangle{
     function updatesettings(){
 
         // Update night mode
-        if(DB.getsett(0) == 1){
+        if(DB.getsett(0) === 1){
             rect.color = '#334613';
             pond.source = "qrc:///img/pond_night.png";
             page.daynight = false;
             page.night = true;
         }
-        else if(DB.getsett(0) == 0){
+        else if(DB.getsett(0) === 0){
             rect.color = '#84b331';
             pond.source = "qrc:///img/pond_day.png";
             page.daynight = false;
@@ -131,7 +131,7 @@ Rectangle{
         }
 
         // Update debug mode
-        if(DB.getsett(1) == 1){
+        if(DB.getsett(1) === 1){
             page.debug = true;
         }
         else{
@@ -139,7 +139,7 @@ Rectangle{
         }
 
         // Update age slowdown
-        if(DB.getsett(2) != 0){
+        if(DB.getsett(2) !== 0){
             page.slowdown = true;
         }
         else{
@@ -147,7 +147,7 @@ Rectangle{
         }
 
         // Update predator spawning
-        if(DB.getsett(11) != 0){
+        if(DB.getsett(11) !== 0){
             page.spawnpred = true;
         }
         else{
@@ -155,7 +155,7 @@ Rectangle{
         }
 
         // Update log messages
-        if(DB.getsett(12) != 0){
+        if(DB.getsett(12) !== 0){
             page.showmsgs = true;
         }
         else{
@@ -163,7 +163,7 @@ Rectangle{
         }
 
         // Update food rate
-        if(DB.getsett(3) != -1){
+        if(DB.getsett(3) !== -1){
             page.foodspawn = DB.getsett(3);
         }
         else{
@@ -519,13 +519,12 @@ Rectangle{
 
     // returns random name
     function ranname(){
-        var names = new Array();
-        var nameg = new Array(); // Name gender lookup
         // Moose in different languages
-        names = ['Elg', 'Eland', 'Poder', 'Hirvi', 'Elan', 'Elch', 'Elgur', 'Munsu', 'Eilc', 'Alce', 'Alces', 'Briedis', 'Atawhenua', 'Losi', 'Uncal', 'Älg', 'Elciaid'];
-        nameg = [    0,       1,       0,       1,      1,      0,       0,       0,      1,      1,       1,         0,           1,      1,       0,     0,         1];
+        var names = ['Elg', 'Eland', 'Poder', 'Hirvi', 'Elan', 'Elch', 'Elgur', 'Munsu', 'Eilc', 'Alce', 'Alces', 'Briedis', 'Atawhenua', 'Losi', 'Uncal', 'Älg', 'Elciaid'];
+        var nameg = [    0,       1,       0,       1,      1,      0,       0,       0,      1,      1,       1,         0,           1,      1,       0,     0,         1]; // Name gender lookup
+
         var index = Math.floor(Math.random()*names.length);
-        return new Array(names[index], nameg[index]);
+        return [names[index], nameg[index]];
     }
 
 
@@ -582,22 +581,21 @@ Rectangle{
 
     // Contains log texts for various events
     function log(event, name, dna, id, local){
-        var texts = new Array();
-        var colorlist = new Array('brown', 'dark', 'red', 'beige');
+        var texts = [];
+        var colorlist = ['brown', 'dark', 'red', 'beige'];
 
         if(id !== false){
             var namegender = DB.getnamegender(id);
         }
 
-        var hisher = (namegender == 1 ? "her" : "his");
-        var himher = (namegender == 1 ? "her" : "him");
-        var heshe = (namegender == 1 ? "she" : "he");
+        var hisher = (namegender === 1 ? "her" : "his");
+        var himher = (namegender === 1 ? "her" : "him");
+        var heshe = (namegender === 1 ? "she" : "he");
 
         // Capitalizes first letter
         String.prototype.capitalize = function() {
             return this.charAt(0).toUpperCase() + this.slice(1);
         }
-
 
         if(dna !== false){
             var color = colorlist[parseInt(dna.substr(2, 2), 2)];
@@ -687,7 +685,7 @@ Rectangle{
         var index = Math.floor(Math.random()*texts.length);
 
         // Avoid logging 2 consecutive ambient messages
-        if(!(DB.getsett(15) == 1 && (event === 'ambient_day' || event === 'ambient_night'))){
+        if(!(DB.getsett(15) === 1 && (event === 'ambient_day' || event === 'ambient_night'))){
            DB.log_add(texts[index], infotext, mooseid);
            if(event === 'ambient_day' || event === 'ambient_night'){
                DB.setsett(15, 1);
@@ -701,14 +699,13 @@ Rectangle{
     }
 
     function story(index){
-        var storylines = new Array();
-        storylines = ['Your head is aching. How long did you lie here before you woke up?', 'Sometimes, when you look at your reflection in the unruffled pond, you try to remember what was before the day you woke up here. You can\'t.', 'You feel alone. Alone in the endless woods. Maybe someone else is out there?', 'You barely sleep. Most nights, you just lie in the tall grass, gazing upon the starry sky above you.', 'How did you get here? Where did you come from? You look at the trees, silently waiting for answers.',
+        var storylines = ['Your head is aching. How long did you lie here before you woke up?', 'Sometimes, when you look at your reflection in the unruffled pond, you try to remember what was before the day you woke up here. You can\'t.', 'You feel alone. Alone in the endless woods. Maybe someone else is out there?', 'You barely sleep. Most nights, you just lie in the tall grass, gazing upon the starry sky above you.', 'How did you get here? Where did you come from? You look at the trees, silently waiting for answers.',
                       'When you lie awake at night, questions start filling your head. Where are you? Why are you here?', 'You realize that the moose are your family now. You see them growing up, getting old and die. It\'s sad.', 'Every time you see a new corpse lying on the ground, you fall apart a little more. You miss them.', 'A single black raven is flying above you, heading north. It\'s the first bird you see here.', 'Sometimes when you dream, you see small, blurred fragments of old memories. You see buildings. A city.',
                       'The days start to blend into each other. How long has it been since you woke up on the glade?', 'Sometimes, mostly at night, you see shadows moving through the dense forest around you.', 'You see more ravens, all heading north, flying across the sky like dark harbingers.', 'You didn\'t dream for a long time now. It feels like the last connection to your old life is fading.', 'Every morning you remember your first day on the clearing. Remember the three moose, their soft fur, their smell.',
                       'The memory of your first day here is the only thing that you have. It makes everything feel real.', 'In some nights, you can feel something in the forest around the glade. The woods feel alive.', 'It happened. You forgot their names. The only memory you had. Destroyed, erased.', 'After the dreams stopped, the nightmares began. You see yourself, running, fleeing, yet not getting anywhere.', 'Every once in a while, you can feel a nameless evil standing right behind you. You spin around. Nothing.',
                       'The huge trees around you look more sinister than before. The entire forest appears to get darker and deeper every day.', 'You can\'t stand this feeling anymore. Always looking around you, just waiting for something to jump on you.', '<endgame>'];
 
-        if(storylines[index] == '<endgame>'){
+        if(storylines[index] === '<endgame>'){
             // Activate end UI
             enddialogue(); // Load message
             endscreen.visible = true; // Show endscreen
@@ -810,8 +807,7 @@ Rectangle{
 
     Rectangle {
         id: rect
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
         color: '#84b331'
         MouseArea {
             // based on Swipe recognition by Gianluca from https://forum.qt.io/topic/39641/swipe-gesture-with-qt-quick-2-0-and-qt-5-2/4  - Thanks!
@@ -908,7 +904,6 @@ Rectangle{
         z: 0
     }
 
-
     Image {
         source: "qrc:///img/pond_day.png"
         smooth: false;
@@ -960,8 +955,6 @@ Rectangle{
             visible: false
             color: 'transparent'
             anchors.fill: parent;
-
-
 
             Label {
                 id: info
@@ -1048,7 +1041,7 @@ Rectangle{
         }
     }
 
-    Rectangle{
+    Rectangle {
         id: logmsg
         visible: false
         y: -5
@@ -1305,8 +1298,7 @@ Rectangle{
     // Endgame UI & Logic
 
     function enddialogue(){
-        var storylines = new Array();
-        storylines = ['Despite any common sense, you run into the deep dark forest surrounding you. You have to get away. Just away.', 'You run through the thick stems in a bizarre zigzag, trying to stay on your feet. Dead branches and leaves cover the forest floor.', 'You feel something behind you, quickly catching up as you stagger deeper and deeper into the woods.', 'You have to see it, just once, just for a second. You need certainty.', 'For a fraction of a second, you turn your head to see behind you. Nothing. A log on the ground. You stumble. You fall.', 'For a moment, you realize that your head is about to hit the ground, then the trees around you form a huge blur as everything fades away.', 'Everything is gone. You hear voices around you, whispering, eternal darkness surrounding you.', 'Slowly, you open your eyes. You look around. You\'re lying on a small glade in a deep forest.', 'You can see a few moose standing in the tall grass in front of you. They look friendly.']
+        var storylines = ['Despite any common sense, you run into the deep dark forest surrounding you. You have to get away. Just away.', 'You run through the thick stems in a bizarre zigzag, trying to stay on your feet. Dead branches and leaves cover the forest floor.', 'You feel something behind you, quickly catching up as you stagger deeper and deeper into the woods.', 'You have to see it, just once, just for a second. You need certainty.', 'For a fraction of a second, you turn your head to see behind you. Nothing. A log on the ground. You stumble. You fall.', 'For a moment, you realize that your head is about to hit the ground, then the trees around you form a huge blur as everything fades away.', 'Everything is gone. You hear voices around you, whispering, eternal darkness surrounding you.', 'Slowly, you open your eyes. You look around. You\'re lying on a small glade in a deep forest.', 'You can see a few moose standing in the tall grass in front of you. They look friendly.']
         if(page.endindex < storylines.length){
 
             // Fade in new text

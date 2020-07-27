@@ -14,7 +14,7 @@ Rectangle {
     property int age
     property int id
     property int namegender
-    property var specieslist: new Array('Common Moose', 'Dark Moose', 'Red Moose', 'Beige Moose')
+    property var specieslist: ['Common Moose', 'Dark Moose', 'Red Moose', 'Beige Moose']
     property int species
     property bool debug
     property bool ancestor: false;
@@ -55,7 +55,7 @@ Rectangle {
         DB.initialize();
 
         // Check for debug mode
-        if(DB.getsett(1) == 1){
+        if(DB.getsett(1) === 1){
             page.debug = true;
         }
         else{
@@ -387,27 +387,29 @@ Rectangle {
                 text: 'Send home'
                 visible: !page.local
                 z: 5
-                anchors.right: parent.right
-                anchors.rightMargin: theme.paddingSmall
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: theme.paddingSmall
                 onClicked: {
                     pageclose.start()
                     DB.delnonlocal(page.id)// Remove guest moose
                 }
             }
+
             Button{
                 id: renamebtn
                 z: 5
-                anchors.right: uploadbtn.left
-                anchors.rightMargin: theme.paddingSmall
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: theme.paddingSmall
                 text: 'Rename'
                 visible: page.local && !page.ancestor
                 onClicked: dialog.visible = true
             }
+
             Button{
                 id: uploadbtn
                 z: 5
-                anchors.right: parent.right
-                anchors.rightMargin: theme.paddingSmall
+                Layout.alignment: Qt.AlignRight
+                Layout.rightMargin: theme.paddingSmall
                 text: 'Upload'
                 visible: page.local && !page.ancestor
                 onClicked: upload()

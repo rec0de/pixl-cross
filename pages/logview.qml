@@ -31,7 +31,7 @@ Rectangle {
         var descending;
 
         // Get log order setting
-        if(DB.getsett(13) != 0){
+        if(DB.getsett(13) !== 0){
             descending = true;
         }
         else{

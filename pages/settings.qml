@@ -28,17 +28,17 @@ Rectangle {
 
 
         var raw = DB.getallsett();
-        var data = new Array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1); // Set values for not yet defined DB data
+        var data = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // Set values for not yet defined DB data
 
         for(var i = 0; i < raw.length; i++){
             data[raw[i].uid] = raw[i].value;
         }
 
-        if(data[0] == 1){
+        if(data[0] === 1){
             daytime.currentIndex = 1;
             daytime.loaded = true;
         }
-        else if(data[0] == 0){
+        else if(data[0] === 0){
             daytime.currentIndex = 0;
             daytime.loaded = true;
         }
@@ -47,27 +47,27 @@ Rectangle {
             daytime.loaded = true;
         }
 
-        if(data[1] == 1){
+        if(data[1] === 1){
             debug.checked = true;
         }
 
-        if(data[2] != 0){
+        if(data[2] !== 0){
             slowage.checked = true;
         }
 
-        if(data[11] != 0){
+        if(data[11] !== 0){
             spawnpred.checked = true;
         }
 
-        if(data[12] != 0){
+        if(data[12] !== 0){
             showmsg.checked = true;
         }
 
-        if(data[13] != 0){
+        if(data[13] !== 0){
             logorder.checked = true;
         }
 
-        if(data[3] != -1){
+        if(data[3] !== -1){
             foodrate.value = data[3];
             foodrate.loaded = true;
         }
