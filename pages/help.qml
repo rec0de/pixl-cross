@@ -116,7 +116,7 @@ Rectangle {
             }
 
             Label {
-                text:   'You can spawn food by tapping on the screen. By tapping on a specific animal, you show/hide its name and energy status. If the game is paused, this will also show additional info on the bottom of the screen. Tapping on this info will take you to the animals stats page. Animal stats can be accessed from the "Info" menu. You can also access the "Settings" page from there where you can activate the "Night mode", adjust the food spawn rate and enable various debug options. It is also possible to change an animals name from its stats page.'
+                text:   'You can spawn food by tapping on the screen. By tapping on a specific animal, you show/hide its name and energy status. If the game is paused, this will also show additional info on the bottom of the screen. Tapping on this info will take you to the animal\'s stats page. Animal stats can be accessed from the "Info" menu. You can also access the "Settings" page from there where you can activate the "Night mode", adjust the food spawn rate and enable various debug options. It is also possible to change an animal\'s name from its stats page.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -138,7 +138,7 @@ Rectangle {
             }
 
             Label {
-                text:   'Every moose has a unique DNA that defines how that moose behaves, how fast, clever or hungry he is. When two animals mate, their DNA is combined and a new animal with that DNA is spawned. An animals DNA massively influences its lifespan and character.'
+                text:   'Every moose has a unique DNA that defines how that moose behaves, how fast, clever or hungry he is. When two animals mate, their DNA is combined and a new animal with that DNA is spawned. An animal\'s DNA massively influences its lifespan and character.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -160,7 +160,7 @@ Rectangle {
             }
 
             Label {
-                text:   'Character traits are calculated from your animals DNA. The trait that matches best with the DNA will be displayed on the animals stats and quick info page. The value in brackets behind the trait represents how well the moose matches the given trait.'
+                text:   'Character traits are calculated from your animal\'s DNA. The trait that matches best with the DNA will be displayed on the animal\'s stats and quick info page. The value in brackets behind the trait represents how well the moose matches the given trait.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -226,7 +226,7 @@ Rectangle {
             }
 
             Label {
-                text:   'When two grown up (age > 20) animals stand next to each other, there is a chance that they will mate and create a new animal. This chance depends on both animals energy (higher is better) and age (lower is better, only if high age slowdown is enabled). The new animals DNA is a combination of the parents DNA. After an animal has mated, it can\'t mate again for ~5 minutes.'
+                text:   'When two grown-up (age > 20) animals stand next to each other, there is a chance that they will mate and create a new animal. This chance depends on both animal\'s energy (higher is better) and age (lower is better, only if high age slowdown is enabled). The new animal\'s DNA is a combination of the parents DNA. After an animal has mated, it can\'t mate again for ~5 minutes.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -248,7 +248,7 @@ Rectangle {
             }
 
             Label {
-                text:   'Status icons are small icons displayed next to your moose that give some information about an animals current behaviour. A green plus indicates that the animal has just fed another moose, a red minus shows that it has stolen food. A red exclamation mark appears when a moose spots a predator and attempts to run away from it and an orange exclamation mark appears when a moose has been warned about, but has not spotted a predator. You can disable status icons in the settings menu.'
+                text:   'Status icons are small icons displayed next to your moose that give some information about an animal\'s current behaviour. A green plus indicates that the animal has just fed another moose, a red minus shows that it has stolen food. A red exclamation mark appears when a moose spots a predator and attempts to run away from it and an orange exclamation mark appears when a moose has been warned about but has not spotted a predator. You can disable status icons in the settings menu.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -270,7 +270,7 @@ Rectangle {
             }
 
             Label {
-                text:   'There is no such thing as gender in this game. It\'s not just that the population is entirely male/female. The moose simply have no gender. However, in my opinion, only adressing moose in a gender-neutral way in the event messages hurts the overall feeling of the game. Therefore, I decided to add an option in the rename dialog to define if the new name (not the moose itself) is female or male. This makes the event messages sound way better and does not influence anything else.'
+                text:   'There is no such thing as gender in this game. It\'s not just that the population is entirely male/female. The moose simply have no gender. However, in my opinion, only addressing moose in a gender-neutral way in the event messages hurts the overall feeling of the game. Therefore, I decided to add an option in the rename dialog to define if the new name (not the moose itself) is female or male. This makes the event messages sound way better and does not influence anything else.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -292,7 +292,7 @@ Rectangle {
             }
 
             Label {
-                text:   'You can see an animals parents on the animals stats page. A grey moose icon indicates that that animal was spawned artificially or in an early verion of pixl without ancestry logging. You can tap on the two icons to get to the stats page of the parents. This version of the stats page lacks rename/upload actions but will still be accessible once the parent animal is dead.'
+                text:   'You can see an animal\'s parents on the animal\'s stats page. A grey moose icon indicates that that animal was spawned artificially or in an early version of pixl without ancestry logging. You can tap on the two icons to get to the stats page of the parents. This version of the stats page lacks rename/upload actions but will still be accessible once the parent animal is dead.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -315,7 +315,7 @@ Rectangle {
             }
 
             Label {
-                text:   'Once an animals age, which can be seen on its stats page, reaches 20, the animal is considered a grown up and is able to mate with other animals. When an animal reaches the age of 90, its movement speed will slowly decline making it harder for this animal to survive. From the age ~80 on, the mating probability of the animal will decrease drastically. This slowdown and mating probability decrease can be disabled in the settings menu.'
+                text:   'Once an animal\'s age, which can be seen on its stats page, reaches 20, the animal is considered a grown-up and is able to mate with other animals. When an animal reaches the age of 90, its movement speed will slowly decline, making it harder for this animal to survive. From the age ~80 on, the mating probability of the animal will decrease drastically. This slowdown and mating probability decrease can be disabled in the settings menu.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -359,7 +359,7 @@ Rectangle {
             }
 
             Label {
-                text:   'Once an animal runs out of energy, it dies. A tombstone will appear at the animals location for a few seconds to indicate the animals death. During that time, you can still see the name of the animal by tapping on the tombstone. If the number of animals drops below three because of a death, the simulation will spawn a new animal.'
+                text:   'Once an animal runs out of energy, it dies. A tombstone will appear at the animal\'s location for a few seconds to indicate the animal\'s death. During that time, you can still see the name of the animal by tapping on the tombstone. If the number of animals drops below three because of a death, the simulation will spawn a new animal.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -403,7 +403,7 @@ Rectangle {
             }
 
             Label {
-                text:   'You can invite moose from your friends phone/tablet over to yours and let them play together by selecting the \'Upload\' option on an animals stats page. Enter the code you receive after uploading the animal on the host device to invite it. Guest animals can\'t mate with local moose and changes (age, death) of guest animals are not synced back to their home device. A \'(g)\' behind the animals name indicates that it is a guest animal. Guest animals can be \'sent home\' from their stats page.'
+                text:   'You can invite moose from your friend\'s phone/tablet over to yours and let them play together by selecting the \'Upload\' option on an animal\'s stats page. Enter the code you receive after uploading the animal on the host device to invite it. Guest animals can\'t mate with local moose and changes (age, death) of guest animals are not synced back to their home device. A \'(g)\' behind the animal\'s name indicates that it is a guest animal. Guest animals can be \'sent home\' from their stats page.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -469,7 +469,7 @@ Rectangle {
             }
 
             Label {
-                text:   'A list of all requested features can be found in the github repo. If you would like to add something, just open an issue on github, write me an email write a review. If you would like to contribute to pixl, feel free to fork the code on github and add the features you\'d like to have. Thanks!'
+                text:   'A list of all requested features can be found in the GitHub repo. If you would like to add something, just open an issue on GitHub, write me an email write a review. If you would like to contribute to pixl, feel free to fork the code on GitHub and add the features you\'d like to have. Thanks!'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {

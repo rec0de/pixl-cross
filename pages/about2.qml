@@ -229,7 +229,7 @@ Rectangle {
 
             Label {
                 id: privacy
-                text:   'By default, pixl does not collect or send any data. However, if you decide to use the Multiplayer/Invite-a-moose feature, the guest animals data will be uploaded to the pixl server and downloaded by the host. During this process, your IP might be logged by our service provider.'
+                text:   'By default, pixl does not collect or send any data. However, if you decide to use the Multiplayer/Invite-a-moose feature, the guest animal\'s data will be uploaded to the pixl server and downloaded by the host. During this process, your IP might be logged by our service provider.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
@@ -275,7 +275,7 @@ Rectangle {
 
             Label {
                 id: aboutme
-                text:   'I develop these apps as a hobby. Therefore, please don\'t expect them to work perfectly. If you like what I\'m doing, please consider liking / commenting the app. Thanks!'
+                text:   'I develop these apps as a hobby. Therefore, please don\'t expect them to work perfectly. If you like what I\'m doing, please consider liking / reviewing the app. Thanks!'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {
