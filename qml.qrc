@@ -47,5 +47,10 @@
         <file>img/eegg5.png</file>
         <file>img/eegg_back.png</file>
         <file>img/moose_eegg.png</file>
+        <file>img/status_alert.png</file>
+        <file>img/status_blank.png</file>
+        <file>img/status_give.png</file>
+        <file>img/status_steal.png</file>
+        <file>img/status_warned.png</file>
     </qresource>
 </RCC>
