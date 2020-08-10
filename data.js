@@ -20,6 +20,7 @@
 // 13  Reverse log order
 // 14  No function, used to detect DB problems
 // 15  1 if last log message was ambient
+// 16  Show status icons (Default on)
 
 // First, let's create a short helper function to get the database connection
 function getDatabase() {
@@ -453,6 +454,8 @@ function hardreset(){
         tx.executeSql('DROP TABLE nonlocal;');
         tx.executeSql('DROP TABLE namegender;');
         tx.executeSql('DROP TABLE log;');
+        tx.executeSql('DROP TABLE matetime;');
+        tx.executeSql('DROP TABLE ancestors;');
     })
 }
 

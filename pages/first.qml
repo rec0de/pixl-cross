@@ -22,6 +22,7 @@ Rectangle{
     property bool showmsgs: true // Shows log messages on main screen
     property bool night: false // Indicates nighttime
     property bool firststart: false // True is game is started for first time after update
+    property bool showstatus: true // Enables / disables status icons for moose
     property int foodspawn: 55 // Food spawn probability (per tick)
     property bool daynight: false // Activates day/night cycle
     property bool paused: true // Game is paused
@@ -160,6 +161,14 @@ Rectangle{
         }
         else{
             page.showmsgs = false;
+        }
+
+        // Update status icons
+        if(DB.getsett(16) !== 0){
+            page.showstatus = true;
+        }
+        else{
+            page.showstatus = false;
         }
 
         // Update food rate
@@ -744,6 +753,7 @@ Rectangle{
         }
 
         if(swiper.swipeindex === 5){
+            pause();
             pageStack.push(Qt.resolvedUrl('qrc:///pages/eegg.qml'));
         }
     }
@@ -1012,7 +1022,7 @@ Rectangle{
            font.family: pixels.name
            anchors.verticalCenter: parent.verticalCenter
            anchors.left: parent.left
-           width: parent.width/2
+           width: parent.width/3
            MouseArea {
               anchors.fill: parent
               onClicked: page.animals[0].energy = 0
@@ -1028,14 +1038,35 @@ Rectangle{
            color: '#ffffff'
            font.family: pixels.name
            anchors.verticalCenter: parent.verticalCenter
-           anchors.right: parent.right
-           width: parent.width/2
+           anchors.horizontalCenter: parent.horizontalCenter
+           width: parent.width/3
            MouseArea {
               anchors.fill: parent
               onClicked: {
                   // Upper limit to avoid critical lag
                   if(page.animals.length < 31){
                       spawnanimal(true);
+                  }
+              }
+           }
+        }
+
+        Label {
+           id: debug_bpred
+           text: 'Pred'
+           horizontalAlignment: Text.AlignHCenter
+           font.pointSize: 42
+           color: '#ffffff'
+           font.family: pixels.name
+           anchors.verticalCenter: parent.verticalCenter
+           anchors.right: parent.right
+           width: parent.width/3
+           MouseArea {
+              anchors.fill: parent
+              onClicked: {
+                  // Upper limit to avoid critical lag
+                  if(page.predators.length < 6){
+                    spawnpredator();
                   }
               }
            }
@@ -1215,7 +1246,7 @@ Rectangle{
                 font.family: pixels.name
             }
             Label {
-                visible: false // Work in progress
+                visible: true
                 id: characterc
                 text: 'Unknown'
                 font.pointSize: 20
@@ -1283,16 +1314,16 @@ Rectangle{
     function pers3(dna){ // Social character trait
         var socialtrait = parseInt(dna.substr(0, 2), 2);
         if(socialtrait === 0){
-            return 'Helpful';
+            return 'Caring';
         }
         else if(socialtrait === 1){
             return 'Egoist';
         }
         else if(socialtrait === 2){
-            return 'Unknown';
+            return 'Communicative';
         }
         else if(socialtrait === 3){
-            return 'Unknown';
+            return 'Solitary';
         }
     }
 

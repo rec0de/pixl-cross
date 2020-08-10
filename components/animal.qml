@@ -50,7 +50,7 @@ Image {
     property real maxspeed: 4 // Max Walking speed
     property real minspeed: 1 // Min Walking Speed
     property int searchingduration: 500 // Max. duration of searching state
-    property int socialtrait: 0 // Character trait for social interaction 0: helpful 1: egoist  2: todo 3: todo
+    property int socialtrait: 0 // Character trait for social interaction 0: caring 1: egoist  2: communicative 3: todo
     property int socialval: 0 // Additional value for social actions, usage depends on socialtrait
 
     //Not in DNA
@@ -78,6 +78,7 @@ Image {
     property int matecooldown: 60*5*1000 // 5 minutes 'cooldown'
     property int attention: 10 // How often animal looks for predators, lower is better
     property int maxwidth: Math.round(45 * page.scale) // Width in pixels when fully grown, adjusted by pixel density of screen
+    property string status: 'blank' // Status image
 
     // Database related
     property string name: 'Mr. Moose'
@@ -94,6 +95,18 @@ Image {
         height: (10/45)*animal.width // Scale with animal size
         x: 0
         y: parent.height - 5*page.scale + parent.sshift
+        z: 0
+    }
+
+    Image {
+        id: statusimg
+        visible: page.showstatus
+        source: "../img/status_"+parent.status+".png"
+        smooth: false
+        width: 20
+        height: 20
+        x: -20
+        y: parent.sshift
         z: 0
     }
 
@@ -255,38 +268,68 @@ Image {
                                 var partnerenergy = page.animals[i].energy / page.animals[i].maxenergy;
 
                                 // Feed young (hungry) moose if not egoist and not hungry
-                                if(socialtrait !== 1 && age > 20*400 && page.animals[i].age < 18*400 && partnerenergy < (ownenergy*1.3)){
-                                    var giveenergy = 0.3 * ownenergy * ownenergy * energy
+                                if(socialtrait !== 1 && age > 20*400 && page.animals[i].age < 20*400 && partnerenergy < (ownenergy*1.3)){
+                                    var giveenergy = 0.25 * ownenergy * ownenergy * energy
                                     page.animals[i].energy = page.animals[i].energy + giveenergy;
 
                                     // Avoid higher than 100% values
                                     if(page.animals[i].maxenergy < page.animals[i].energy){
+                                        energy += page.animals[i].energy - page.animals[i].maxenergy; // Give additional energy back
                                         page.animals[i].energy = page.animals[i].maxenergy;
                                     }
 
                                     energy = energy - giveenergy;
                                     console.log('Fed '+giveenergy+' to '+animals[i].name);
                                 }
-                                // Feed if partner is hungry and animal is helpful with 1/2 chance
-                                /*else if(false && socialtrait === 0 && chance(2) && partnerenergy < ownenergy){ // Deactivated for now, WIP
-                                    giveenergy = 0.23 * ownenergy * ownenergy * energy
+                                // Feed if partner is hungry and animal is caring with 1/2 chance
+                                else if(socialtrait === 0 && chance(2) && partnerenergy < ownenergy){
+                                    giveenergy = 0.2 * ownenergy * ownenergy * energy
                                     page.animals[i].energy = page.animals[i].energy + giveenergy;
+
+                                    if(page.animals[i].energy > page.animals[i].maxenergy){
+                                        energy  += page.animals[i].energy - page.animals[i].maxenergy; // Give additional energy back
+                                        page.animals[i].energy = page.animals[i].maxenergy; // Avoid higher than 100% energy
+                                    }
+
                                     energy = energy - giveenergy;
                                     console.log('Fed '+giveenergy+' to moose.');
+
+                                    if(status !== 'give'){
+                                        status = 'give'; // Display feeding icon
+                                        statusreset.start();
+                                    }
                                 }
                                 // Steal food if egoist with 1/5 chance
-                                else if(false && socialtrait === 1 && chance(5) && partnerenergy > ownenergy){ // Deactivated for now, WIP
+                                else if(socialtrait === 1 && chance(5) && partnerenergy > ownenergy){
                                     var takeenergy = 0.1 * partnerenergy * partnerenergy * page.animals[i].energy;
-                                    page.animals[i].energy = page.animals[i].energy - giveenergy;
-                                    energy = energy + giveenergy;
-                                    console.log('Stole '+giveenergy+' from moose.');
-                                }*/
+                                    page.animals[i].energy = page.animals[i].energy - takeenergy;
+                                    energy = energy + takeenergy;
+
+                                    if(energy > maxenergy){
+                                        energy = maxenergy; // Avoid higher than 100% energy
+                                    }
+
+                                    console.log('Stole '+takeenergy+' from moose.');
+
+                                    if(status !== 'steal'){
+                                        status = 'steal'; // Display stealing icon
+                                        statusreset.start();
+                                    }
+                                }
                             }
                         }
                         else{
-                          if(chance(10) || (age < 400 * grownupage && chance(Math.pow(2, Math.round(age/2000)) + 1))){ // Young moose tend to stay near others, formula: chance = 2^(0.2 * (age/400)) + 1
-                            xytodirection(page.animals[i].x + (animal.width * 1.1), page.animals[i].y);
-                          }
+                            var prob = 10;
+                            if(socialtrait === 3) { // Solitary moose are less likely to stay near others
+                                prob = 25;
+                            }
+
+                            if(chance(prob) || (age < 400 * grownupage && chance(Math.pow(2, Math.round(age/2000)) + 1))){ // Young moose tend to stay near others, formula: chance = 2^(0.2 * (age/400)) + 1
+                              xytodirection(page.animals[i].x + 50, page.animals[i].y);
+                            }
+                            else if(socialtrait === 0 && page.animals[i].age < 400 * grownupage && chance(2)){ // Caring moose stay near young moose
+                              xytodirection(page.animals[i].x + 50, page.animals[i].y);
+                            }
                         }
                     }
                 }
@@ -296,7 +339,7 @@ Image {
         }
 
         // Look for predators
-        if(page.predators.length > 0 && chance(animal.attention)){
+        if(page.predators.length > 0 && ((searching && chance(Math.floor(animal.attention / 2))) || chance(animal.attention))){
             // Check for other moose within viewarea
             for (i = 0; i < page.predators.length; i++){
                 dist = -1;
@@ -306,6 +349,39 @@ Image {
                     dist = Math.sqrt(dx*dx + dy*dy);
                     if(dist < viewarea){
                         xytodirection(2*dx, 2*dy); // Run in opposite direction
+
+                        if(!searching){
+                            searching = true; // Temporally increase attention
+                            searcher.start();
+                        }
+
+                        if(status !== 'alert'){
+                            status = 'alert'; // Display alert icon
+                            statusreset.start();
+                        }
+
+                        // Warn surrounding animals if communicative
+                        if(socialtrait === 2){
+
+                            // Check for moose within viewarea
+                            var px = page.predators[i].x;
+                            var py = page.predators[i].y;
+
+                            for (var i = 0; i < page.animals.length; i++){
+                                dist = -1;
+
+                                if(page.animals[i].alive && page.animals[i].id !== id){ // Exclude dead animals and own animal
+                                    dx = x - (page.animals[i].x + 50)
+                                    dy = y - page.animals[i].y
+                                    dist = Math.sqrt(dx*dx + dy*dy)
+                                    if(dist < socialval * 40 && dist > 0){
+                                        // Trigger warning function
+                                        page.animals[i].warn(px, py);
+                                        console.log('Warned animal');
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -389,6 +465,25 @@ Image {
 
     // End tick function
 
+    // Warn function called by communicative animals
+    function warn(px, py){
+        if(socialtrait !== 1){ // Egoist moose don't get warnings
+            var dx = x - (px + 50);
+            var dy = y - py;
+            xytodirection(2*dx, 2*dy); // Run in opposite direction
+
+            if(status !== 'alert'){
+                status = 'alert'; // Display alert icon
+                statusreset.start();
+            }
+
+            if(!searching){ // Increase attention
+                searching = true;
+                searcher.start();
+            }
+        }
+    }
+
     function chance(probability){
         if(Math.floor(Math.random()*probability) === 0){
             return true;
@@ -447,6 +542,16 @@ Image {
             searchingduration = 300 + parseInt(dna.substr(36, 4), 2)*100;
             socialtrait = parseInt(dna.substr(0, 2), 2);
             socialval = parseInt(dna.substr(40, 3), 2);
+
+            if(socialtrait === 0){
+                // Bonus energy for caring animals
+                maxenergy += socialval / 3;
+            }
+            else if(socialtrait === 3){
+                // Solitary animals have larger viewarea
+                viewarea += socialval * 6;
+            }
+
         }
         else{
             console.log('DNA import failed. '+dna+' '+dna.length);
@@ -597,6 +702,14 @@ Image {
         running: false
         repeat: false
         onTriggered: parent.searching = false;
+    }
+
+    Timer {
+        id: statusreset
+        interval: 2500
+        running: false
+        repeat: false
+        onTriggered: parent.status = 'blank';
     }
 
     Timer {

@@ -28,7 +28,7 @@ Rectangle {
 
 
         var raw = DB.getallsett();
-        var data = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // Set values for not yet defined DB data
+        var data = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // Set values for not yet defined DB data
 
         for(var i = 0; i < raw.length; i++){
             data[raw[i].uid] = raw[i].value;
@@ -65,6 +65,10 @@ Rectangle {
 
         if(data[13] !== 0){
             logorder.checked = true;
+        }
+
+        if(data[16] !== 0){
+            statusicons.checked = true;
         }
 
         if(data[3] !== -1){
@@ -130,6 +134,15 @@ Rectangle {
         }
     }
 
+    function switchstatus(){
+        var val = DB.getsett(16);
+        if(!statusicons.checked){
+            DB.setsett(16, 0); // Do not display status icons
+        }
+        else{
+            DB.setsett(16, 1); // Display status icons
+        }
+    }
 
     // Save new foodrate to DB
     function updatefoodrate(){
@@ -554,6 +567,29 @@ Rectangle {
                     anchors.right: parent.right
                     onCheckedChanged:{
                         switchlogorder()
+                    }
+                }
+            }
+
+            Rectangle{
+                height: logorder.height
+                width: parent.width - theme.paddingSmall*2
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: 'transparent'
+
+                Label{
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    text: 'Display status icons next to moose'
+                    font.pointSize: theme.fontSizeSmall
+                }
+
+                Switch {
+                    id: statusicons
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    onCheckedChanged:{
+                        switchstatus()
                     }
                 }
             }

@@ -166,16 +166,16 @@ Rectangle {
         var dna = page.dna;
         var socialtrait = parseInt(dna.substr(0, 2), 2);
         if(socialtrait === 0){
-            return 'Helpful';
+            return 'Caring';
         }
         else if(socialtrait === 1){
             return 'Egoist';
         }
         else if(socialtrait === 2){
-            return 'Unknown';
+            return 'Communicative';
         }
         else if(socialtrait === 3){
-            return 'Unknown';
+            return 'Solitary';
         }
     }
 
@@ -185,7 +185,7 @@ Rectangle {
     }
 
     function upload() {
-        var url = 'https://cdown.pf-control.de/pixl/upload.php?dna='+page.dna+'&name='+page.name+'&age='+(page.age*400); // alias domain for rec0de.net with valid SSL cert
+        var url = 'https://rec0de.net/pixl/upload.php?dna='+page.dna+'&name='+page.name+'&age='+(page.age*400);
 
         var xhr = new XMLHttpRequest();
         xhr.timeout = 1000;
@@ -532,7 +532,7 @@ Rectangle {
             }
 
             Label {
-                visible: false // Work in progress
+                visible: true
                 text: pers3()
                 font.pointSize: theme.fontSizeSmall
                 anchors.horizontalCenter: parent.horizontalCenter
