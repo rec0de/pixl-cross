@@ -219,24 +219,23 @@ Image {
     }
 
     function generate(){
-            viewarea = (80 + Math.floor(Math.random()*8) * 15)*page.scale;
-            movingchange = 1 + Math.floor(Math.random()*7);
-            stillchange = 4 + Math.floor(Math.random()*10);
-            directionchange = Math.floor(Math.random()*16);
-            maxenergy = 2 + Math.floor(Math.random()*3);
-            energystill = 0.002 + Math.floor(Math.random()*10)/1900;
-            minspeed = (0.7 + Math.floor(Math.random()*7)/2)*page.scale;
-            maxspeed = (minspeed + Math.floor(Math.random()*10)/1.5)*page.scale;
-            energymoving = energystill * (1 + maxspeed / 9) * (1 + Math.floor(Math.random()*8)/15)
-            jumpforce = 7 + Math.floor(Math.random()*8);
-            searchingduration = 300 + Math.floor(Math.random()*16)*100;
+        viewarea = (80 + Math.floor(Math.random()*8) * 15)*page.scale;
+        movingchange = 1 + Math.floor(Math.random()*7);
+        stillchange = 4 + Math.floor(Math.random()*10);
+        directionchange = Math.floor(Math.random()*16);
+        maxenergy = 2 + Math.floor(Math.random()*3);
+        energystill = 0.002 + Math.floor(Math.random()*10)/1900;
+        minspeed = (0.7 + Math.floor(Math.random()*7)/2)*page.scale;
+        maxspeed = (minspeed + Math.floor(Math.random()*10)/1.5)*page.scale;
+        energymoving = energystill * (1 + maxspeed / 9) * (1 + Math.floor(Math.random()*8)/15)
+        jumpforce = 7 + Math.floor(Math.random()*8);
+        searchingduration = 300 + Math.floor(Math.random()*16)*100;
     }
 
 
     function xytodirection(ox, oy){
         var dx = x - ox;
         var dy = y - oy;
-
 
         // I am apparently too stupid to solve this with clean math, so...
         while(Math.abs(dx) + Math.abs(dy) > maxspeed){

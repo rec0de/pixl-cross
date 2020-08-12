@@ -270,7 +270,7 @@ Rectangle {
             }
 
             Label {
-                text:   'There is no such thing as gender in this game. It\'s not just that the population is entirely male/female. The moose simply have no gender. However, in my opinion, only addressing moose in a gender-neutral way in the event messages hurts the overall feeling of the game. Therefore, I decided to add an option in the rename dialog to define if the new name (not the moose itself) is female or male. This makes the event messages sound way better and does not influence anything else.'
+                text:   'There is no such thing as gender in this game. It\'s not just that the population is entirely male/female. The moose simply have no gender. However, in my opinion, only addressing moose in a gender-neutral way in the event messages hurts the overall feeling of the game. Therefore, I decided to add an option in the rename dialog to choose preferred pronouns for the new name. This makes the event messages sound way better and does not influence anything else.'
                 font.pointSize: theme.fontSizeSmall
                 wrapMode: Text.WordWrap
                 anchors {

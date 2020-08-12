@@ -28,6 +28,7 @@ Rectangle{
     property bool paused: true // Game is paused
     property int playtime: 0 // Time played in seconds
     property int endindex: 0 // Index for end story
+    property bool pauseonmsg: false // Pause game on new log message
 
     // Screen scaling factor (by pixel density)
     property real scale: getscale() // Moose width at factor 1 is 45px
@@ -169,6 +170,14 @@ Rectangle{
         }
         else{
             page.showstatus = false;
+        }
+
+        // Update pause on message
+        if(DB.getsett(17) === 1){
+            page.pauseonmsg = true;
+        }
+        else{
+            page.pauseonmsg = false;
         }
 
         // Update food rate
@@ -321,7 +330,7 @@ Rectangle{
         }
         else{
           // Spawn food at touch location
-          if(x < (page.width - 30*page.scale)){ // Avoid uneatable food
+          if(x < (page.width - 30*page.scale) && y < (page.height - 30*page.scale)){ // Avoid uneatable food
               var food_comp = Qt.createComponent("qrc:///components/food.qml");
               var temp = food_comp.createObject(page, {x: x, y: y, manual: true});
               page.food.push(temp);
@@ -469,7 +478,7 @@ Rectangle{
         page.animals.push(temp);
         DB.setnamegender(id, namegender);
         DB.setsett(6, id+1); // Increment nextid
-        DB.ancestors_add(dna, name, id, -1, -1) // Add ancestor entry with unknown parents
+        DB.ancestors_add(dna, name, id, -1, -1); // Add ancestor entry with unknown parents
         if(writelog){
             log('spawn', name, dna, id, true); // Log spawning
         }
@@ -490,8 +499,8 @@ Rectangle{
         page.animals.push(temp);
         DB.setnamegender(id, namegender);
         DB.setsett(6, id+1); // Increment nextid
-        DB.ancestors_add(dna, name, id, parenta, parentb) // Add ancestor entry given parents
-         log('birth', name, dna, id, true); // Log birth
+        DB.ancestors_add(dna, name, id, parenta, parentb); // Add ancestor entry given parents
+        log('birth', name, dna, id, true); // Log birth
     }
 
     function spawnpredator(){
@@ -531,7 +540,7 @@ Rectangle{
     function ranname(){
         // Moose in different languages
         var names = ['Elg', 'Eland', 'Poder', 'Hirvi', 'Elan', 'Elch', 'Elgur', 'Munsu', 'Eilc', 'Alce', 'Alces', 'Briedis', 'Atawhenua', 'Losi', 'Uncal', 'Älg', 'Elciaid'];
-        var nameg = [    0,       1,       0,       1,      1,      0,       0,       0,      1,      1,       1,         0,           1,      1,       0,     0,         1]; // Name gender lookup
+        var nameg = [    2,       1,       0,       1,      1,      0,       2,       0,      1,      1,       1,         2,           1,      1,       0,     0,         2]; // Name gender lookup
 
         var index = Math.floor(Math.random()*names.length);
         return [names[index], nameg[index]];
@@ -598,9 +607,25 @@ Rectangle{
             var namegender = DB.getnamegender(id);
         }
 
-        var hisher = (namegender === 1 ? "her" : "his");
-        var himher = (namegender === 1 ? "her" : "him");
-        var heshe = (namegender === 1 ? "she" : "he");
+        var hisher;
+        var himher;
+        var heshe;
+        switch(namegender) {
+            case 0:
+                hisher = "his";
+                himher = "him";
+                heshe = "he";
+                break;
+            case 1:
+                hisher = "her";
+                himher = "her";
+                heshe = "she";
+                break;
+            default:
+                hisher = "their";
+                himher = "them";
+                heshe = "they";
+        }
 
         // Capitalizes first letter
         String.prototype.capitalize = function() {
@@ -737,6 +762,9 @@ Rectangle{
         if(page.showmsgs){
             msgtext.text = text;
             logmsg.visible = true;
+            if(page.pauseonmsg){
+                pause();
+            }
         }
     }
 
@@ -898,7 +926,7 @@ Rectangle{
         opacity: 1
         width: 80 * page.scale
         height: 110 * page.scale
-        x: page.width - width - 100 * scale
+        x: Math.floor((page.width - width - 100 * scale) / 5*page.scale) * page.scale
         y: 500
         z: 1000
     }

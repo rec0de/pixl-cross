@@ -23,8 +23,6 @@ import 'qrc:///data.js' as DB
 // Socialvalue: DNA Value (0-7), exact usage depends on socialtrait
 // Blank space: Not used for now
 
-
-
 Image {
     source: "qrc:///img/moose1.png"
     mirror: false
@@ -162,19 +160,19 @@ Image {
         // Look for food
         var searchprob = 0.12 * Math.pow(1.068, Math.round((energy / maxenergy)*100)) + 10; // Searching probability, depends on energy
         if(Math.round((energy / maxenergy)*100) < 91 && (chance(searchprob)|| searching)){ // Look for food aprox. every 20 ticks (if energy is below 91%)
-            var dist;
+            var dist = -1;
 
             // Check for food within viewarea
             for (var i = 0; i < page.food.length; i++){
-                dist = -1;
-                if(page.food[i].active){
-                    var dx = x - page.food[i].x
-                    var dy = y - page.food[i].y
-                    dist = Math.sqrt(dx*dx + dy*dy)
-                    if(dist < viewarea){
-                        xytodirection(page.food[i].x, page.food[i].y);
-                        break;
-                    }
+                var food = page.food[i]
+
+                if(!food.active)
+                    continue;
+
+                dist = distance(x, y, food.x, food.y)
+                if(dist < viewarea){
+                    xytodirection(food.x, food.y);
+                    break;
                 }
             }
             if(dist >= 0 && dist < eatarea){ // Found food & in eating area
@@ -185,12 +183,7 @@ Image {
                 page.food[i].despawn();
 
                 // Add 1 to animal energy level
-                if(energy + 1 <= maxenergy){
-                    energy = energy + 1;
-                }
-                else{
-                    energy = maxenergy;
-                }
+                energy = Math.min(maxenergy, energy + 1)
             }
             else if(dist >= 0 && dist < viewarea){ // Found food
                 // Start moving in food direction and enter searching state (if not already active)
@@ -205,14 +198,13 @@ Image {
 
         // Look for other moose
         if(chance(20)){ // Look for moose aprox. every 20 ticks
+            dist = -1;
 
             // Check for other moose within viewarea
             for (i = 0; i < page.animals.length; i++){
-                dist = -1;
-                if(page.animals[i].alive && (page.animals[i].x !== x || page.animals[i].y !== y)){ // Exclude 'own' animal
-                    dx = x - (page.animals[i].x + (animal.width * 1.1))
-                    dy = y - page.animals[i].y
-                    dist = Math.sqrt(dx*dx + dy*dy)
+
+                if(page.animals[i].alive && page.animals[i].id !== id){ // Exclude 'own' animal
+                    dist = distance(x, y, page.animals[i].x + (animal.width * 1.1), page.animals[i].y)
                     if(dist < viewarea && dist > 0){
                         if(dist < (animal.width * 0.7)){
                             // Stop movement
@@ -303,11 +295,7 @@ Image {
                                 else if(socialtrait === 1 && chance(5) && partnerenergy > ownenergy){
                                     var takeenergy = 0.1 * partnerenergy * partnerenergy * page.animals[i].energy;
                                     page.animals[i].energy = page.animals[i].energy - takeenergy;
-                                    energy = energy + takeenergy;
-
-                                    if(energy > maxenergy){
-                                        energy = maxenergy; // Avoid higher than 100% energy
-                                    }
+                                    energy = Math.min(maxenergy, energy + takeenergy);
 
                                     console.log('Stole '+takeenergy+' from moose.');
 
@@ -325,10 +313,10 @@ Image {
                             }
 
                             if(chance(prob) || (age < 400 * grownupage && chance(Math.pow(2, Math.round(age/2000)) + 1))){ // Young moose tend to stay near others, formula: chance = 2^(0.2 * (age/400)) + 1
-                              xytodirection(page.animals[i].x + 50, page.animals[i].y);
+                                xytodirection(page.animals[i].x + 50, page.animals[i].y);
                             }
                             else if(socialtrait === 0 && page.animals[i].age < 400 * grownupage && chance(2)){ // Caring moose stay near young moose
-                              xytodirection(page.animals[i].x + 50, page.animals[i].y);
+                                xytodirection(page.animals[i].x + 50, page.animals[i].y);
                             }
                         }
                     }
@@ -341,51 +329,49 @@ Image {
         // Look for predators
         if(page.predators.length > 0 && ((searching && chance(Math.floor(animal.attention / 2))) || chance(animal.attention))){
             // Check for other moose within viewarea
+            dist = -1;
             for (i = 0; i < page.predators.length; i++){
-                dist = -1;
-                if(page.predators[i].alive){
-                    dx = x - (page.predators[i].x + (animal.width * 1.1));
-                    dy = y - page.predators[i].y;
-                    dist = Math.sqrt(dx*dx + dy*dy);
-                    if(dist < viewarea){
-                        xytodirection(2*dx, 2*dy); // Run in opposite direction
 
-                        if(!searching){
-                            searching = true; // Temporally increase attention
-                            searcher.start();
-                        }
+                if(!page.predators[i].alive)
+                    continue;
 
-                        if(status !== 'alert'){
-                            status = 'alert'; // Display alert icon
-                            statusreset.start();
-                        }
+                dist = distance(x, y, page.predators[i].x + (animal.width * 1.1), page.predators[i].y);
 
-                        // Warn surrounding animals if communicative
-                        if(socialtrait === 2){
+                if(dist < viewarea){
+                    xytodirection(2*dx, 2*dy); // Run in opposite direction
 
-                            // Check for moose within viewarea
-                            var px = page.predators[i].x;
-                            var py = page.predators[i].y;
+                    if(!searching){
+                        searching = true; // Temporally increase attention
+                        searcher.start();
+                    }
 
-                            for (var i = 0; i < page.animals.length; i++){
-                                dist = -1;
+                    if(status !== 'alert'){
+                        status = 'alert'; // Display alert icon
+                        statusreset.start();
+                    }
 
-                                if(page.animals[i].alive && page.animals[i].id !== id){ // Exclude dead animals and own animal
-                                    dx = x - (page.animals[i].x + 50)
-                                    dy = y - page.animals[i].y
-                                    dist = Math.sqrt(dx*dx + dy*dy)
-                                    if(dist < socialval * 40 && dist > 0){
-                                        // Trigger warning function
-                                        page.animals[i].warn(px, py);
-                                        console.log('Warned animal');
-                                    }
-                                }
+                    // Warn surrounding animals if communicative
+                    if(socialtrait === 2){
+                        // Check for moose within viewarea
+                        var px = page.predators[i].x;
+                        var py = page.predators[i].y;
+
+                        for (var i = 0; i < page.animals.length; i++){
+
+                            if(!page.animals[i].alive || page.animals[i].id === id) // Exclude dead animals and own animal
+                                continue;
+
+                            if(distance(x, y, page.animals[i].x + 50, page.animals[i].y) < socialval * 40 && dist > 0){
+                                // Trigger warning function
+                                page.animals[i].warn(px, py);
+                                console.log('Warned animal');
                             }
                         }
                     }
                 }
             }
         }
+
 
 
         // Log message if starving
@@ -399,7 +385,6 @@ Image {
         if(moving){
             absy = absy + yspeed;
             x = x + xspeed;
-
 
             // Keep animal on screen (x axis)
             if(x < 0){
@@ -485,12 +470,7 @@ Image {
     }
 
     function chance(probability){
-        if(Math.floor(Math.random()*probability) === 0){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return Math.floor(Math.random()*probability) === 0;
     }
 
     function die(){
@@ -512,12 +492,7 @@ Image {
 
         if(dna.length === 40){
             for(var i = 0; i < 9; i++){
-                if(Math.floor(Math.random()*2) === 1){
-                    dna += '1';
-                }
-                else{
-                    dna += '0';
-                }
+                dna += chance(2) ? '1' : '0'
             }
 
             importfromdna(dna)
@@ -559,8 +534,6 @@ Image {
     }
 
     function showname(){
-        // Toggle nametag
-        name.visible = !name.visible;
         if(page.paused){
             // Display animal info
             animalstats.a_name = animal.name;
@@ -570,6 +543,10 @@ Image {
             animalstats.a_id = animal.id;
             animalstats.a_energy = Math.round((animal.energy / animal.maxenergy)*100) + '%';
             animalstats.visible = true;
+        }
+        else {
+            // Toggle nametag
+            name.visible = !name.visible;
         }
     }
 
@@ -632,16 +609,16 @@ Image {
 
 
         // Avoid running into screen border
-        if(animal.x < 10){
+        if(animal.x < 10 * page.scale){
             // xspeed has to be positive
             xspeed = Math.abs(xspeed);
         }
-        else if(animal.x > page.width - animal.width - 5){
+        else if(animal.x > page.width - animal.width - 5*page.scale){
             // xspeed has to be negative
             xspeed = - Math.abs(xspeed);
         }
 
-        if(animal.y < 70){
+        if(animal.y < 70 * page.scale){
             // yspeed has to be positive
             yspeed = Math.abs(yspeed);
 
@@ -694,6 +671,12 @@ Image {
            }
         }
         return dna;
+    }
+
+    function distance(x1, y1, x2, y2) {
+        var dx = x1 - x2
+        var dy = y1 - y2
+        return Math.sqrt(dx*dx + dy*dy)
     }
 
     Timer {

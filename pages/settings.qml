@@ -28,7 +28,7 @@ Rectangle {
 
 
         var raw = DB.getallsett();
-        var data = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // Set values for not yet defined DB data
+        var data = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]; // Set values for not yet defined DB data
 
         for(var i = 0; i < raw.length; i++){
             data[raw[i].uid] = raw[i].value;
@@ -71,6 +71,10 @@ Rectangle {
             statusicons.checked = true;
         }
 
+        if(data[17] === 1){
+            pauseonmsg.checked = true;
+        }
+
         if(data[3] !== -1){
             foodrate.value = data[3];
             foodrate.loaded = true;
@@ -79,6 +83,7 @@ Rectangle {
             foodrate.value = 55; // Use default if DB value is not set
             foodrate.loaded = true;
         }
+
         if(data[10] > 22){
             // Only display story reset if story has been completed
             storyreset.visible = true;
@@ -141,6 +146,18 @@ Rectangle {
         }
         else{
             DB.setsett(16, 1); // Display status icons
+        }
+    }
+
+    function switchpausemsg(){
+        var val = DB.getsett(17);
+        if(val !== 1){
+            DB.setsett(17, 1); // Activate pause on msg
+            pauseonmsg.checked = true;
+        }
+        else{
+            DB.setsett(17, 0); // Deactivate pause on msg
+            pauseonmsg.checked = false;
         }
     }
 
@@ -572,7 +589,7 @@ Rectangle {
             }
 
             Rectangle{
-                height: logorder.height
+                height: statusicons.height
                 width: parent.width - theme.paddingSmall*2
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: 'transparent'
@@ -580,7 +597,7 @@ Rectangle {
                 Label{
                     anchors.top: parent.top
                     anchors.left: parent.left
-                    text: 'Display status icons next to moose'
+                    text: 'Display moose status icons'
                     font.pointSize: theme.fontSizeSmall
                 }
 
@@ -590,6 +607,29 @@ Rectangle {
                     anchors.right: parent.right
                     onCheckedChanged:{
                         switchstatus()
+                    }
+                }
+            }
+
+            Rectangle{
+                height: pauseonmsg.height
+                width: parent.width - theme.paddingSmall*2
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: 'transparent'
+
+                Label{
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    text: 'Pause on new log message'
+                    font.pointSize: theme.fontSizeSmall
+                }
+
+                Switch {
+                    id: pauseonmsg
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    onCheckedChanged:{
+                        switchpausemsg()
                     }
                 }
             }

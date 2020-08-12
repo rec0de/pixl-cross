@@ -285,7 +285,7 @@ Rectangle {
                 Label{
                     anchors.top: parent.top
                     anchors.left: parent.left
-                    text: 'This name is'
+                    text: 'Use these pronouns:'
                     font.pointSize: theme.fontSizeSmall
                     color: theme.invertedColor
                 }
@@ -295,8 +295,9 @@ Rectangle {
                     anchors.right: parent.right
 
                     model: ListModel {
-                        ListElement { text: "male" }
-                        ListElement { text: "female" }
+                        ListElement { text: "he/him" }
+                        ListElement { text: "she/her" }
+                        ListElement { text: "they/them" }
                     }
                 }
             }
