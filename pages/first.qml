@@ -602,9 +602,10 @@ Rectangle{
     function log(event, name, dna, id, local){
         var texts = [];
         var colorlist = ['brown', 'dark', 'red', 'beige'];
+        var namegender = 2; // Default to they/them
 
-        if(id !== false){
-            var namegender = DB.getnamegender(id);
+        if(id !== false && local){
+            namegender = DB.getnamegender(id);
         }
 
         var hisher;
@@ -712,7 +713,7 @@ Rectangle{
         }
 
         var mooseid = -1;
-        if(id !== false && local !== false){
+        if(id !== false && local){
             mooseid = id;
         }
 
