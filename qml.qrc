@@ -52,5 +52,6 @@
         <file>img/status_give.png</file>
         <file>img/status_steal.png</file>
         <file>img/status_warned.png</file>
+        <file>util.js</file>
     </qresource>
 </RCC>

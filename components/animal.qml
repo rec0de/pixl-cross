@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import 'qrc:///data.js' as DB
+import 'qrc:///util.js' as Util
 
 // Animal DNA specs
 //
@@ -159,7 +160,7 @@ Image {
 
         // Look for food
         var searchprob = 0.12 * Math.pow(1.068, Math.round((energy / maxenergy)*100)) + 10; // Searching probability, depends on energy
-        if(Math.round((energy / maxenergy)*100) < 91 && (chance(searchprob)|| searching)){ // Look for food aprox. every 20 ticks (if energy is below 91%)
+        if(Math.round((energy / maxenergy)*100) < 91 && (Util.chance(searchprob)|| searching)){ // Look for food aprox. every 20 ticks (if energy is below 91%)
             var dist = -1;
 
             // Check for food within viewarea
@@ -169,7 +170,7 @@ Image {
                 if(!food.active)
                     continue;
 
-                dist = distance(x, y, food.x, food.y)
+                dist = Util.distance(x, y, food.x, food.y)
                 if(dist < viewarea){
                     xytodirection(food.x, food.y);
                     break;
@@ -197,14 +198,14 @@ Image {
         }
 
         // Look for other moose
-        if(chance(20)){ // Look for moose aprox. every 20 ticks
+        if(Util.chance(20)){ // Look for moose aprox. every 20 ticks
             dist = -1;
 
             // Check for other moose within viewarea
             for (i = 0; i < page.animals.length; i++){
 
                 if(page.animals[i].alive && page.animals[i].id !== id){ // Exclude 'own' animal
-                    dist = distance(x, y, page.animals[i].x + (animal.width * 1.1), page.animals[i].y)
+                    dist = Util.distance(x, y, page.animals[i].x + (animal.width * 1.1), page.animals[i].y)
                     if(dist < viewarea && dist > 0){
                         if(dist < (animal.width * 0.7)){
                             // Stop movement
@@ -222,7 +223,7 @@ Image {
                             }
                             var multiplicator = (multa * multb)*5; // 5 if both animals have 100% and youger than 80, higher if animals are hungry
 
-                            if(!still && !page.animals[i].still && local && page.animals[i].local && age >= grownupage*400 && page.animals[i].age >= grownupage*400 && chance(multiplicator) && DB.getmatetime(id) < page.playtime && DB.getmatetime(page.animals[i].id) < page.playtime){
+                            if(!still && !page.animals[i].still && local && page.animals[i].local && age >= grownupage*400 && page.animals[i].age >= grownupage*400 && Util.chance(multiplicator) && DB.getmatetime(id) < page.playtime && DB.getmatetime(page.animals[i].id) < page.playtime){
 
                                 // Align faces
                                 if(page.animals[i].x > x){
@@ -254,7 +255,7 @@ Image {
                                 DB.setmatetime(id, page.playtime + 60*5);
                                 DB.setmatetime(page.animals[i].id, page.playtime + 60*5);
                             }
-                            else if(chance(5)){ // Otherwise interact with 1/5 probability
+                            else if(Util.chance(5)){ // Otherwise interact with 1/5 probability
 
                                 var ownenergy = energy / maxenergy
                                 var partnerenergy = page.animals[i].energy / page.animals[i].maxenergy;
@@ -274,7 +275,7 @@ Image {
                                     console.log('Fed '+giveenergy+' to '+animals[i].name);
                                 }
                                 // Feed if partner is hungry and animal is caring with 1/2 chance
-                                else if(socialtrait === 0 && chance(2) && partnerenergy < ownenergy){
+                                else if(socialtrait === 0 && Util.chance(2) && partnerenergy < ownenergy){
                                     giveenergy = 0.2 * ownenergy * ownenergy * energy
                                     page.animals[i].energy = page.animals[i].energy + giveenergy;
 
@@ -292,7 +293,7 @@ Image {
                                     }
                                 }
                                 // Steal food if egoist with 1/5 chance
-                                else if(socialtrait === 1 && chance(5) && partnerenergy > ownenergy){
+                                else if(socialtrait === 1 && Util.chance(5) && partnerenergy > ownenergy){
                                     var takeenergy = 0.1 * partnerenergy * partnerenergy * page.animals[i].energy;
                                     page.animals[i].energy = page.animals[i].energy - takeenergy;
                                     energy = Math.min(maxenergy, energy + takeenergy);
@@ -312,10 +313,10 @@ Image {
                                 prob = 25;
                             }
 
-                            if(chance(prob) || (age < 400 * grownupage && chance(Math.pow(2, Math.round(age/2000)) + 1))){ // Young moose tend to stay near others, formula: chance = 2^(0.2 * (age/400)) + 1
+                            if(Util.chance(prob) || (age < 400 * grownupage && Util.chance(Math.pow(2, Math.round(age/2000)) + 1))){ // Young moose tend to stay near others, formula: chance = 2^(0.2 * (age/400)) + 1
                                 xytodirection(page.animals[i].x + 50, page.animals[i].y);
                             }
-                            else if(socialtrait === 0 && page.animals[i].age < 400 * grownupage && chance(2)){ // Caring moose stay near young moose
+                            else if(socialtrait === 0 && page.animals[i].age < 400 * grownupage && Util.chance(2)){ // Caring moose stay near young moose
                                 xytodirection(page.animals[i].x + 50, page.animals[i].y);
                             }
                         }
@@ -327,7 +328,7 @@ Image {
         }
 
         // Look for predators
-        if(page.predators.length > 0 && ((searching && chance(Math.floor(animal.attention / 2))) || chance(animal.attention))){
+        if(page.predators.length > 0 && ((searching && Util.chance(Math.floor(animal.attention / 2))) || Util.chance(animal.attention))){
             // Check for other moose within viewarea
             dist = -1;
             for (i = 0; i < page.predators.length; i++){
@@ -335,7 +336,7 @@ Image {
                 if(!page.predators[i].alive)
                     continue;
 
-                dist = distance(x, y, page.predators[i].x + (animal.width * 1.1), page.predators[i].y);
+                dist = Util.distance(x, y, page.predators[i].x + (animal.width * 1.1), page.predators[i].y);
 
                 if(dist < viewarea){
                     xytodirection(2*dx, 2*dy); // Run in opposite direction
@@ -361,7 +362,7 @@ Image {
                             if(!page.animals[i].alive || page.animals[i].id === id) // Exclude dead animals and own animal
                                 continue;
 
-                            if(distance(x, y, page.animals[i].x + 50, page.animals[i].y) < socialval * 40 && dist > 0){
+                            if(Util.distance(x, y, page.animals[i].x + 50, page.animals[i].y) < socialval * 40 && dist > 0){
                                 // Trigger warning function
                                 page.animals[i].warn(px, py);
                                 console.log('Warned animal');
@@ -469,10 +470,6 @@ Image {
         }
     }
 
-    function chance(probability){
-        return Math.floor(Math.random()*probability) === 0;
-    }
-
     function die(){
         source = 'qrc:///img/tombstone.png';
         shadow.visible = false;
@@ -492,7 +489,7 @@ Image {
 
         if(dna.length === 40){
             for(var i = 0; i < 9; i++){
-                dna += chance(2) ? '1' : '0'
+                dna += Util.chance(2) ? '1' : '0'
             }
 
             importfromdna(dna)
@@ -594,7 +591,7 @@ Image {
         var absy = speed - absx;
 
         // Determine if each value is negative / positive
-        if(chance(2)){
+        if(Util.chance(2)){
             xspeed = - absx;
         }
         else{
@@ -626,7 +623,7 @@ Image {
             if(yspeed < Math.abs(xspeed)){
                 yspeed = Math.abs(xspeed);
                 xspeed = speed - yspeed;
-                if(chance(2)){ // Choose xspeed direction
+                if(Util.chance(2)){ // Choose xspeed direction
                     xspeed = - xspeed;
                 }
            }
@@ -643,7 +640,7 @@ Image {
         var part2;
 
         // Crossover
-        if(chance(2)){
+        if(Util.chance(2)){
           part1 = dna1.substr(crossoverpoint);
           part2 = dna2.substr(0, crossoverpoint);
         }
@@ -661,7 +658,7 @@ Image {
 
     function mutate(dna){
         for(var i = 0; i < dna.length; i++){
-           if(chance(100)){
+           if(Util.chance(100)){
                if(dna[i] === '1'){
                    dna = dna.substr(0, i) + '0' + dna.substr(i+1);
                }
@@ -671,12 +668,6 @@ Image {
            }
         }
         return dna;
-    }
-
-    function distance(x1, y1, x2, y2) {
-        var dx = x1 - x2
-        var dy = y1 - y2
-        return Math.sqrt(dx*dx + dy*dy)
     }
 
     Timer {

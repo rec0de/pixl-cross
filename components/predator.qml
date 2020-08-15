@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import 'qrc:///util.js'
 
 Image {
     source: "../img/monster.png"
@@ -70,16 +71,14 @@ Image {
         }
 
         // Look for moose
-        if((Math.floor(Math.random()*10) == 5 || searching)&& !retreat){ // Look for moose aprox. every 10 ticks
+        if((Util.chance(10) || searching) && !retreat){ // Look for moose aprox. every 10 ticks
 
             // Check for moose within viewarea
             var dist;
             for (var i = 0; i < page.animals.length; i++){
                 dist = -1;
                 if(page.animals[i].alive){ // Exclude dead animals
-                    var dx = x - (page.animals[i].x + 50)
-                    var dy = y - page.animals[i].y
-                    dist = Math.sqrt(dx*dx + dy*dy)
+                    dist = Util.distance(x, y, page.animals[i].x + 50, page.animals[i].y)
                     if(dist < viewarea && dist > 0){
                         if(dist < (15*page.scale)){
                             // Stop movement
